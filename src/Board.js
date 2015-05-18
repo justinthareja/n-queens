@@ -79,12 +79,38 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var board = this.attributes;
+      var row = board[rowIndex];
+      var exists = 0;  //if a piece exists in a row, increment exists
+      for(var i = 0; i< row.length; i++) {
+        if(row[i] === 1) {
+          exists++;
+          if(exists >= 2) {
+            return true;
+          }
+        }
+      }
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var board = this.attributes;
+      for(var i = 0; i < board.n; i++) {
+        var row = board[i];
+        var exists = 0;  //if a piece exists in a row, increment exists
+
+        for(var j = 0; j< row.length; j++) {
+          if(row[j] === 1) {
+            exists++;
+            if(exists >= 2) {
+              return true;
+            }
+          }
+        }
+      }
+
+      return false;
     },
 
 
