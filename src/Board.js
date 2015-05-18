@@ -79,7 +79,7 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var board = this.attributes;
+      var board = this.attributes;  //MAKE SURE THIS IS THE PROPERTY TO USE.
       var row = board[rowIndex];
       var exists = 0;  //if a piece exists in a row, increment exists
       for(var i = 0; i< row.length; i++) {
@@ -97,19 +97,11 @@
     hasAnyRowConflicts: function() {
       var board = this.attributes;
       for(var i = 0; i < board.n; i++) {
-        var row = board[i];
-        var exists = 0;  //if a piece exists in a row, increment exists
-
-        for(var j = 0; j< row.length; j++) {
-          if(row[j] === 1) {
-            exists++;
-            if(exists >= 2) {
-              return true;
-            }
-          }
+        if(this.hasRowConflictAt(i)) {
+          return true
         }
-      }
 
+      }
       return false;
     },
 
@@ -120,7 +112,12 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var board = this.attributes;
+      /*  var(col = 0; col<board.n; col++) {
+
+
+        }
+      return false;*/
     },
 
     // test if any columns on this board contain conflicts
