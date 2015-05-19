@@ -14,44 +14,68 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = [];
-  var board = new Board({n: n});
-  var r=0, c=0;
-
+  var board = new Board({'n':n});
   var hasConflict = function () {
     return board.hasAnyRowConflicts() && board.hasAnyColConflicts;
   };
-
-  var run = function (row, col) {
-    board.toggle(row,col);
-    if(hasConflict) {
-      board.toggle(row,col);
-      c++;
-      if (c < board.attributes.n) {
-        run(r,c);
+  var solution = [];
+  var run = function(c) {
+    for(var i = 0; i< board.attributes.n; i++) {
+      board.togglePiece(i,c);
+      if(!hasConflict) {
+        if(c+1 < board.attributes.n) {
+          run(c+1);
+        } else if (c ===board.attributes.n-1) {
+          solution.push(board.attributes);
+        }
+      } else {
+        board.togglePiece(i,c);
       }
     }
-    else {
-      if (r === board.attributes.n-1) {
-        return;
-      }
-      c=0;
-      r++;
-      if (r < board.attributes.n) {
-        run(r,c);
-      }
   };
+  run(0);
 
-  run(0,0);
 
-  for (var i=0; i<board.attributes.n; i++) {
-    solution.push(board.attributes[i]);
-  }
+  // var solution = [];
+  // var board = new Board({n: n});
+  // var r=0, c=0;
+
+  // var hasConflict = function () {
+  //   return board.hasAnyRowConflicts() && board.hasAnyColConflicts;
+  // };
+
+  // var run = function (row, col) {
+  //   board.toggle(row,col);
+  //   if(hasConflict) {
+  //     board.toggle(row,col);
+  //     c++;
+  //     if (c < board.attributes.n) {
+  //       run(r,c);
+  //     }
+  //   }
+  //   else {
+  //     if (r === board.attributes.n-1) {
+  //       return;
+  //     }
+  //     c=0;
+  //     r++;
+  //     if (r < board.attributes.n) {
+  //       run(r,c);
+  //     }
+  // };
+
+  // run(0,0);
+
+  // for (var i=0; i<board.attributes.n; i++) {
+  //   solution.push(board.attributes[i]);
+  // }
 
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  
   return solution;
 };
+
 
 
 
