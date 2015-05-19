@@ -1,40 +1,3 @@
-/*           _
-   ___  ___ | |_   _____ _ __ ___
-  / __|/ _ \| \ \ / / _ \ '__/ __|
-  \__ \ (_) | |\ V /  __/ |  \__ \
-  |___/\___/|_| \_/ \___|_|  |___/
-
-*/
-
-// hint: you'll need to do a full-search of all possible arrangements of pieces!
-// (There are also optimizations that will allow you to skip a lot of the dead search space)
-// take a look at solversSpec.js to see what the tests are expecting
-
-
-// return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-
-window.findNRooksSolution = function(n) {
-  var board = new Board({'n':n});
-  var hasConflict = function () {
-    return board.hasAnyRowConflicts() && board.hasAnyColConflicts;
-  };
-  var solution = [];
-  var run = function(c) {
-    for(var i = 0; i< board.attributes.n; i++) {
-      board.togglePiece(i,c);
-      if(!hasConflict) {
-        if(c+1 < board.attributes.n) {
-          run(c+1);
-        } else if (c ===board.attributes.n-1) {
-          solution.push(board.attributes);
-        }
-      } else {
-        board.togglePiece(i,c);
-      }
-    }
-  };
-  run(0);
-
 
   // var solution = [];
   // var board = new Board({n: n});
@@ -70,9 +33,54 @@ window.findNRooksSolution = function(n) {
   //   solution.push(board.attributes[i]);
   // }
 
+/*           _
+   ___  ___ | |_   _____ _ __ ___
+  / __|/ _ \| \ \ / / _ \ '__/ __|
+  \__ \ (_) | |\ V /  __/ |  \__ \
+  |___/\___/|_| \_/ \___|_|  |___/
+
+*/
+
+// hint: you'll need to do a full-search of all possible arrangements of pieces!
+// (There are also optimizations that will allow you to skip a lot of the dead search space)
+// take a look at solversSpec.js to see what the tests are expecting
+
+
+// return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
+
+window.findNRooksSolution = function(n) {
+  var board = new Board({'n':n});
+  console.log(board)
+  var hasConflict = function () {
+    return board.hasAnyRowConflicts() || board.hasAnyColConflicts();
+  };
+  var solution = [];
+
+
+  var run = function(r) {
+    for(var i = 0; i< board.attributes.n; i++) {
+      board.togglePiece(r, i);
+      if(!hasConflict()) {
+        if(r+1 < board.attributes.n) {
+          run(r+1);
+        } else if (r === board.attributes.n - 1) {
+          for (var j = 0; j < board.attributes.n; j++) {
+            solution.push(board.attributes[j]);
+          }
+        }
+      } else {
+          board.togglePiece(r, i);
+      }
+    }
+  };
+  debugger;
+  run(0);
+
+
+
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  
+
   return solution;
 };
 
