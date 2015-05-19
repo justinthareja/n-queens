@@ -50,15 +50,13 @@
 
 window.findNRooksSolution = function(n) {
   var board = new Board({'n':n});
-  console.log(board)
   var hasConflict = function () {
     return board.hasAnyRowConflicts() || board.hasAnyColConflicts();
   };
   var solution = [];
 
-
   var run = function(r) {
-    for(var i = 0; i< board.attributes.n; i++) {
+    for(var i = 0; i < board.attributes.n; i++) {
       board.togglePiece(r, i);
       if(!hasConflict()) {
         if(r+1 < board.attributes.n) {
@@ -66,6 +64,7 @@ window.findNRooksSolution = function(n) {
         } else if (r === board.attributes.n - 1) {
           for (var j = 0; j < board.attributes.n; j++) {
             solution.push(board.attributes[j]);
+            // debugger;
           }
         }
       } else {
@@ -73,14 +72,9 @@ window.findNRooksSolution = function(n) {
       }
     }
   };
-  debugger;
+  debugger
   run(0);
-
-
-
-
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-
   return solution;
 };
 
@@ -89,9 +83,39 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+ var board = new Board({'n':n});
+ var solution = [];
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+ var hasConflict = function () {
+   return board.hasAnyRowConflicts() || board.hasAnyColConflicts();
+ };
+
+ var run = function(r) {
+   for(var i = 0; i < board.attributes.n; i++) {
+     board.togglePiece(r, i);
+     if(!hasConflict()) {
+       if(r+1 < board.attributes.n) {
+         run(r+1);
+       } else if (r === board.attributes.n - 1) {
+         for (var j = 0; j < board.attributes.n; j++) {
+           solution.push(board.attributes[j]);
+         }
+       }
+     } else {
+         board.togglePiece(r, i);
+     }
+   }
+ };
+
+ var solutions = [];
+  for(var k = 0; k<n; k++) {
+    run(k);
+    solutions.push( solution );
+    solution = [];
+  }
+  console.log('solutions =', solutions);
+  var solutionCount = solutions.length;
+  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
 
